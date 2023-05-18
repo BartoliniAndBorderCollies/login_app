@@ -10,24 +10,28 @@ public class UserRepository {
     public void create(String userName, String password, String email) {
         String createUser = "INSERT INTO users (login, password, email) VALUES (?, ?, ?)";
 
-        try(Connection connection = DatabaseConnection.getConnection()) {
-            try(PreparedStatement preparedStatement = connection.prepareStatement(createUser)) {
-
-                preparedStatement.setString(1, userName);
-                preparedStatement.setString(2, password);
-                preparedStatement.setString(3, email);
-                preparedStatement.executeUpdate();
-            }
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(createUser)) {
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, email);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void delete(String userName) {
+    public void delete(User user) {
+        String deleteUser = "DELETE FROM users WHERE login = ?";
 
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(deleteUser)) {
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void update(String userName, String password) {
+    public void update(User user) {
 
     }
 
@@ -45,8 +49,6 @@ public class UserRepository {
         return true;
 
     }
-
-
 
 
 }
