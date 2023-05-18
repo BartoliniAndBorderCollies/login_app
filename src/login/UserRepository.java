@@ -32,7 +32,17 @@ public class UserRepository {
     }
 
     public void update(User user) {
+        String updateUser = "UPDATE users SET login = ?, password = ?, email = ? WHERE id = ?";
 
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(updateUser)) {
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setInt(4, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void find(String userName) {
