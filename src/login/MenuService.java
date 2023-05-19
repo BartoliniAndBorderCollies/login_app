@@ -1,6 +1,12 @@
 package login;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuService {
+    private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
+    private static final String ERROR_PASSWORD_INVALID = "Invalid password.";
+    private static final String SUCCESS_REGISTRATION = "Registration completed!";
 
     private final UserRepository userRepository;
 
@@ -9,11 +15,35 @@ public class MenuService {
 
     }
 
-    public boolean checkIfUserExist (String userName) {
-        return userRepository.checkIfUserExist(userName);
+    public boolean checkIfLoginExist(String userName) {
+        return userRepository.checkIfLoginExist(userName);
     }
 
     public boolean checkIfCorrectPassword(String password) {
+        // walidacja, że hasło powinno mieć x znaków, albo coś tam
         return userRepository.checkIfCorrectPassword(password);
+    }
+
+    public List<String> register(String login, String password) {
+        List<String> lines = registerValidation(login, password);
+        if (lines.isEmpty()) {
+            // wprowadź dane do bazy danych
+            lines.add(SUCCESS_REGISTRATION);
+        }
+        return lines;
+    }
+
+    public List<String> registerValidation(String login, String password) {
+        List<String> lines = new ArrayList<>();
+
+        if (checkIfLoginExist(login)) {
+            lines.add(ERROR_USERNAME_ALREADY_EXIST);
+        }
+
+        if (!checkIfCorrectPassword(password)) {
+            lines.add(ERROR_PASSWORD_INVALID);
+        }
+
+        return lines;
     }
 }

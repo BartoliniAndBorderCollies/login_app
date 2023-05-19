@@ -66,7 +66,7 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
-    public boolean checkIfUserExist(String userName) {
+    public boolean checkIfLoginExist(String userName) {
         return find(userName).isPresent();
     }
 

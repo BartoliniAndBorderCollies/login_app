@@ -7,8 +7,6 @@ public class Main {
         MenuService menuService = new MenuService(userRepository);
         MenuController menuController = new MenuController(menuService, view);
 
-        view.welcome();
-        menuController.login();
-
+        menuController.run();
     }
 }
