@@ -49,11 +49,11 @@ public class UserRepository {
         User user = null;
 
         String findUser = "SELECT * FROM users WHERE login = ?";
-        try(PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
             preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 int foundUserId = resultSet.getInt("id");
                 String foundLogin = resultSet.getString("login");
                 String foundPassword = resultSet.getString("password");
@@ -67,9 +67,7 @@ public class UserRepository {
     }
 
     public boolean checkIfUserExist(String userName) {
-
-        return true;
-
+        return find(userName).isPresent();
     }
 
     public boolean checkIfCorrectPassword(String password) {

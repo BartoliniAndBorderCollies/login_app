@@ -18,7 +18,7 @@ public class MenuController {
         System.out.println("User name: ");
         String userName = scanner.nextLine();
         if(!menuService.checkIfUserExist(userName)) {
-            System.out.println("Invalid user name");
+            System.out.println("This user already exist.");
             return;
         }
         System.out.println("Password: ");
