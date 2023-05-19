@@ -1,9 +1,9 @@
 package login;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class UserRepository {
 
@@ -45,8 +45,25 @@ public class UserRepository {
         }
     }
 
-    public void find(String userName) {
+    public Optional<User> find(String userName) {
+        User user = null;
 
+        String findUser = "SELECT * FROM users WHERE login = ?";
+        try(PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                int foundUserId = resultSet.getInt("id");
+                String foundLogin = resultSet.getString("login");
+                String foundPassword = resultSet.getString("password");
+                String foundEmail = resultSet.getString("email");
+                user = new User(foundUserId, foundLogin, foundPassword, foundEmail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(user);
     }
 
     public boolean checkIfUserExist(String userName) {
