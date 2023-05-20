@@ -41,7 +41,7 @@ public class MenuService {
             lines.add(ERROR_USERNAME_ALREADY_EXIST);
         }
 
-        if (!checkIfCorrectPassword(password)) {
+        if (checkIfCorrectPassword(password)) {
             lines.add(ERROR_PASSWORD_INVALID);
         }
         return lines;
@@ -50,6 +50,7 @@ public class MenuService {
     public User findUser(String name) throws IllegalArgumentException {
         return userRepository.find(name).orElseThrow(IllegalArgumentException::new);
     }
+
     //Dodałem powyższą metodę drugą już na szukanie findUser(), po to, żeby metoda ta zwracała mi User
     // potrzebowalem Usera do metody delete() na bazie danych (userRepository)
     //bo pierwsza metoda find(), która jest w klasie bazy danych zwraca Optional<User>, a Optionala nie mogłem użyc
@@ -57,6 +58,13 @@ public class MenuService {
 
     public void delete(String userName) {
         userRepository.delete(findUser(userName));
+    }
+
+    public void update(String userName, String password, String email) {
+        userRepository.update(findUserUpdate(userName, password,email));
+    }
+    public User findUserUpdate(String name, String password, String email) {
+        return userRepository.find(name).orElseThrow();
     }
 
 

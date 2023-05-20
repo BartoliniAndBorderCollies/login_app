@@ -19,6 +19,8 @@ public class MenuController {
     private static final String LOGIN_SUCCESSFUL = "Login successful";
     private static final String DELETE_QUESTION = "What user name you want to delete?";
     private static final String DELETE_CONFIRMATION = "User has been deleted.";
+    private static final String UPDATE_INFO = "Enter new user name and new password";
+    private static final String UPDATE_CONFIRMATION = "Update successful";
 
     private final MenuService menuService;
     private final View view;
@@ -55,6 +57,17 @@ public class MenuController {
         view.update(DELETE_CONFIRMATION);
     }
 
+    public void update() {
+        view.update(UPDATE_INFO);
+        String login = askForTextInput(LOGIN);
+        String password = askForTextInput(PASSWORD);
+        String email = askForTextInput(EMAIL);
+
+        menuService.registerValidation(login, password);
+        menuService.update(login, password, email); //TODO: to be corrected
+        view.update(UPDATE_CONFIRMATION);
+    }
+
 
 
     private String askForTextInput(String message) {
@@ -70,12 +83,10 @@ public class MenuController {
         view.update(SHOW_MENU);
 
         switch (scanner.nextInt()) {
-            case 1: register();
-            case 2: login();
-            case 3:
-            case 4: delete();
-
-            default: view.update(ANSWER_REQUIREMENT);
+            case 1 -> register();
+            case 2 -> login();
+            case 3 -> update();
+            case 4 -> delete();
         }
     }
 }
