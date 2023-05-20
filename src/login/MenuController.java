@@ -1,16 +1,24 @@
 package login;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MenuController {
     private static final String WELCOME_MESSAGE = "Welcome to login application.";
-    private static final String ASK_FOR_LOGIN_AND_PASSWORD = """
-            Please insert your login and password:
-            """;
     private static final String LOGIN = "Login:";
     private static final String PASSWORD = "Password:";
+    private static final String EMAIL = "Email:";
+    private static final String SHOW_MENU = """
+            Choose what you want to do, type the answer:
+            1. Create account
+            2. Login
+            3. Update account
+            4. Delete account
+            """;
+    private static final String ANSWER_REQUIREMENT = "Answer must be an integer";
+
+    private static final String LOGIN_SUCCESSFUL = "Login successful";
+    private static final String DELETE_QUESTION = "What user name you want to delete?";
+    private static final String DELETE_CONFIRMATION = "User has been deleted.";
 
     private final MenuService menuService;
     private final View view;
@@ -23,9 +31,20 @@ public class MenuController {
     public void register() {
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
+        String email = askForTextInput(EMAIL);
 
-        view.update(menuService.register(login, password));
+        view.update(menuService.register(login, password, email));
     }
+
+    public void login() {
+        String login = askForTextInput(LOGIN);
+        String password = askForTextInput(PASSWORD);
+
+        view.update(menuService.registerValidation(login, password));
+        view.update(LOGIN_SUCCESSFUL);
+    }
+
+
 
     private String askForTextInput(String message) {
         Scanner scanner = new Scanner(System.in);
@@ -37,12 +56,13 @@ public class MenuController {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         view.update(WELCOME_MESSAGE);
-        // opcja wyboru, co chcesz zrobić
+        view.update(SHOW_MENU);
+
         switch (scanner.nextInt()) {
-            case 1:
-            case 2:
-            default:
+            case 1: register();
+            case 2: login();
+
+            default: view.update(ANSWER_REQUIREMENT);
         }
-        register();
     }
 }

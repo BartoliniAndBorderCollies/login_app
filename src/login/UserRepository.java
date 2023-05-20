@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class UserRepository {
 
-    public void create(String userName, String password, String email) {
+    public void register(String userName, String password, String email) {
         String createUser = "INSERT INTO users (login, password, email) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(createUser)) {
@@ -71,7 +71,7 @@ public class UserRepository {
     }
 
     public boolean checkIfCorrectPassword(String password) {
-        return true;
+        return find(password).isPresent();
 
     }
 

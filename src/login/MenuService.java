@@ -24,10 +24,10 @@ public class MenuService {
         return userRepository.checkIfCorrectPassword(password);
     }
 
-    public List<String> register(String login, String password) {
+    public List<String> register(String login, String password, String email) {
         List<String> lines = registerValidation(login, password);
         if (lines.isEmpty()) {
-            // wprowadź dane do bazy danych
+            userRepository.register(login, password, email);
             lines.add(SUCCESS_REGISTRATION);
         }
         return lines;
@@ -43,7 +43,8 @@ public class MenuService {
         if (!checkIfCorrectPassword(password)) {
             lines.add(ERROR_PASSWORD_INVALID);
         }
-
         return lines;
     }
+
+
 }
