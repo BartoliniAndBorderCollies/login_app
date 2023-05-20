@@ -9,6 +9,8 @@ public class MenuService {
     private static final String ERROR_PASSWORD_INVALID = "Invalid password.";
     private static final String SUCCESS_REGISTRATION = "Registration completed!";
 
+    private static final String EMAIL_ALREADY_EXIST = "This email address already exist.";
+
     private final UserRepository userRepository;
 
     public MenuService(UserRepository userRepository) {
@@ -65,6 +67,14 @@ public class MenuService {
     }
     public User findUserUpdate(String name, String password, String email) {
         return userRepository.find(name).orElseThrow();
+    }
+
+    public boolean checkIfEmailExist(String email) {
+        if(userRepository.checkIfEmailExist(email)) {
+            System.out.println(EMAIL_ALREADY_EXIST);
+            return true;
+        }
+        return false;
     }
 
 

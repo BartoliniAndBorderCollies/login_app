@@ -66,13 +66,39 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
+    public Optional<User> findEmail(String email) {
+        User user = null;
+
+        String findUser = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int foundUserId = resultSet.getInt("id");
+                String foundLogin = resultSet.getString("login");
+                String foundPassword = resultSet.getString("password");
+                String foundEmail = resultSet.getString("email");
+                user = new User(foundUserId, foundLogin, foundPassword, foundEmail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(user);
+    }
+
+
+
     public boolean checkIfLoginExist(String userName) {
         return find(userName).isPresent();
     }
 
     public boolean checkIfCorrectPassword(String password) {
-        return find(password).isPresent();
+        return find(password).isPresent(); //TODO: to be corrected
+    }
 
+    public boolean checkIfEmailExist (String email) {
+        return findEmail(email).isPresent();
     }
 
 

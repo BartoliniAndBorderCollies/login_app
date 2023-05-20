@@ -64,6 +64,9 @@ public class MenuController {
         String email = askForTextInput(EMAIL);
 
         menuService.registerValidation(login, password);
+        if(menuService.checkIfEmailExist(email)) {
+            return;
+        }
         menuService.update(login, password, email); //TODO: to be corrected
         view.update(UPDATE_CONFIRMATION);
     }
