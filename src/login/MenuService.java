@@ -2,6 +2,7 @@ package login;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MenuService {
     private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
@@ -44,6 +45,18 @@ public class MenuService {
             lines.add(ERROR_PASSWORD_INVALID);
         }
         return lines;
+    }
+
+    public User findUser(String name) throws IllegalArgumentException {
+        return userRepository.find(name).orElseThrow(IllegalArgumentException::new);
+    }
+    //Dodałem powyższą metodę drugą już na szukanie findUser(), po to, żeby metoda ta zwracała mi User
+    // potrzebowalem Usera do metody delete() na bazie danych (userRepository)
+    //bo pierwsza metoda find(), która jest w klasie bazy danych zwraca Optional<User>, a Optionala nie mogłem użyc
+    // potrzebowałem samego User user. żeby to osiagnąć muszę obsłużyć optionala poprzez .orElseThrow
+
+    public void delete(String userName) {
+        userRepository.delete(findUser(userName));
     }
 
 

@@ -44,6 +44,17 @@ public class MenuController {
         view.update(LOGIN_SUCCESSFUL);
     }
 
+    public void delete() {
+        view.update(DELETE_QUESTION);
+        String login = askForTextInput(LOGIN);
+        String password = askForTextInput(PASSWORD);
+
+        menuService.checkIfLoginExist(login);
+        menuService.checkIfCorrectPassword(password);
+        menuService.delete(login);
+        view.update(DELETE_CONFIRMATION);
+    }
+
 
 
     private String askForTextInput(String message) {
@@ -61,6 +72,8 @@ public class MenuController {
         switch (scanner.nextInt()) {
             case 1: register();
             case 2: login();
+            case 3:
+            case 4: delete();
 
             default: view.update(ANSWER_REQUIREMENT);
         }
