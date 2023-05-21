@@ -45,20 +45,29 @@ public class UserRepository {
         }
     }
 
-    public Optional<User> find(String userName) {
+    public Optional<User> findByLogin(String login) {
+        String selectSql = "SELECT * FROM users WHERE login = ?";
+        return find(login, selectSql);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        String selectSql = "SELECT * FROM users WHERE email = ?";
+        return find(email, selectSql);
+    }
+
+    private Optional<User> find(String parameter, String sqlQuery) {
         User user = null;
 
-        String findUser = "SELECT * FROM users WHERE login = ?";
-        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
-            preparedStatement.setString(1, userName);
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, parameter);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                int foundUserId = resultSet.getInt("id");
-                String foundLogin = resultSet.getString("login");
-                String foundPassword = resultSet.getString("password");
-                String foundEmail = resultSet.getString("email");
-                user = new User(foundUserId, foundLogin, foundPassword, foundEmail);
+                int id = resultSet.getInt("id");
+                String login = resultSet.getString("login");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                user = new User(id, login, password, email);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,57 +75,11 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
-    public Optional<User> findPassword(String password) {
-        User user = null;
-
-        String findUser = "SELECT * FROM users WHERE password = ?";
-        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
-            preparedStatement.setString(1, password);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int foundUserId = resultSet.getInt("id");
-                String foundLogin = resultSet.getString("login");
-                String foundPassword = resultSet.getString("password");
-                String foundEmail = resultSet.getString("email");
-                user = new User(foundUserId, foundLogin, foundPassword, foundEmail);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.ofNullable(user);
-    }
-
-    public Optional<User> findEmail(String email) {
-        User user = null;
-
-        String findUser = "SELECT * FROM users WHERE email = ?";
-        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(findUser)) {
-            preparedStatement.setString(1, email);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int foundUserId = resultSet.getInt("id");
-                String foundLogin = resultSet.getString("login");
-                String foundPassword = resultSet.getString("password");
-                String foundEmail = resultSet.getString("email");
-                user = new User(foundUserId, foundLogin, foundPassword, foundEmail);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.ofNullable(user);
-    }
-
-    public boolean checkIfLoginExist(String userName) {
-        return find(userName).isPresent();
-    }
-
-    public boolean checkIfCorrectPassword(String password) {
-        return findPassword(password).isPresent();
+    public boolean checkIfLoginExist(String login) {
+        return findByLogin(login).isPresent();
     }
 
     public boolean checkIfEmailExist (String email) {
-        return findEmail(email).isPresent();
+        return findByEmail(email).isPresent();
     }
 }

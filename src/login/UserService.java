@@ -2,9 +2,8 @@ package login;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class MenuService {
+public class UserService {
     private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
     private static final String USER_NO_EXIST = "This user does not exist.";
     private static final String ERROR_PASSWORD_INVALID = "Invalid password.";
@@ -16,7 +15,7 @@ public class MenuService {
 
     private final UserRepository userRepository;
 
-    public MenuService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -25,7 +24,11 @@ public class MenuService {
     }
 
     public boolean checkIfCorrectPassword(String password) {
-        return userRepository.checkIfCorrectPassword(password);
+        // TODO: logika dla poprawności hasła.
+        if (password.length() < 8) {
+            return false;
+        }
+        return true;
     }
 
     public List<String> register(String login, String password, String email) {
@@ -58,43 +61,36 @@ public class MenuService {
         return lines;
     }
 
-    public List<String> loginValidation (String login, String password) {
+    public List<String> loginValidation(String login, String password) {
         List<String> lines = new ArrayList<>();
 
-        if(!checkIfLoginExist(login)) {
-            lines.add(USER_NO_EXIST);
-        }
-
-        if(!checkIfCorrectPassword(password)) {
-            lines.add(ERROR_PASSWORD_INVALID);
+        try {
+            if (!findUser(login).getPassword().equals(password)) {
+                // TODO lines.add()
+            }
+        } catch (IllegalArgumentException e) {
+            // TODO lines.add();
         }
 
         return lines;
     }
 
-    public List<String> delete(String userName, String password) {
+    public List<String> delete(String login, String password) {
         List<String> lines = new ArrayList<>();
 
-        if(!loginValidation(userName, password).isEmpty()) {
+        if (!loginValidation(login, password).isEmpty()) {
             lines.add(DELETE_FAILED);
         }
 
-        if(!checkIfCorrectPassword(password)) {
-            lines.add(ERROR_PASSWORD_INVALID);
-        }
-
-        if(lines.isEmpty()) {
-            userRepository.delete(findUser(userName));
+        if (lines.isEmpty()) {
+            userRepository.delete(findUser(login));
             lines.add(DELETE_CONFIRMATION);
         }
-
         return lines;
     }
 
-
-
-    public User findUser(String name) throws IllegalArgumentException {
-        return userRepository.find(name).orElseThrow(IllegalArgumentException::new);
+    public User findUser(String login) throws IllegalArgumentException {
+        return userRepository.findByLogin(login).orElseThrow(IllegalArgumentException::new);
     }
 
     //Dodałem powyższą metodę drugą już na szukanie findUser(), po to, żeby metoda ta zwracała mi User
@@ -102,22 +98,19 @@ public class MenuService {
     //bo pierwsza metoda find(), która jest w klasie bazy danych zwraca Optional<User>, a Optionala nie mogłem użyc
     // potrzebowałem samego User user. żeby to osiagnąć muszę obsłużyć optionala poprzez .orElseThrow
 
-
-
-    public void update(String userName, String password, String email) {
-        userRepository.update(findUserUpdate(userName, password,email));
+    public void update(String login, String password, String email) {
+        userRepository.update(findUserUpdate(login, password, email));
     }
-    public User findUserUpdate(String name, String password, String email) {
-        return userRepository.find(name).orElseThrow();
+
+    public User findUserUpdate(String login, String password, String email) {
+        return userRepository.findByLogin(login).orElseThrow();
     }
 
     public boolean checkIfEmailExist(String email) {
-        if(userRepository.checkIfEmailExist(email)) {
-            System.out.println(EMAIL_ALREADY_EXIST);
+        if (userRepository.checkIfEmailExist(email)) {
+            // TODO System.out.println(EMAIL_ALREADY_EXIST);
             return true;
         }
         return false;
     }
-
-
 }

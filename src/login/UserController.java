@@ -2,7 +2,7 @@ package login;
 
 import java.util.Scanner;
 
-public class MenuController {
+public class UserController {
     private static final String WELCOME_MESSAGE = "Welcome to login application.";
     private static final String LOGIN = "Login:";
     private static final String PASSWORD = "Password:";
@@ -19,11 +19,11 @@ public class MenuController {
     private static final String DELETE_QUESTION = "What user you want to delete?";
     private static final String UPDATE_INFO = "Enter new user name and new password";
     private static final String UPDATE_CONFIRMATION = "Update successful";
-    private final MenuService menuService;
+    private final UserService userService;
     private final View view;
 
-    public MenuController(MenuService menuService, View view) {
-        this.menuService = menuService;
+    public UserController(UserService userService, View view) {
+        this.userService = userService;
         this.view = view;
     }
 
@@ -32,14 +32,14 @@ public class MenuController {
         String password = askForTextInput(PASSWORD);
         String email = askForTextInput(EMAIL);
 
-        view.update(menuService.register(login, password, email));
+        view.update(userService.register(login, password, email));
     }
 
     public void login() {
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
 
-        view.update(menuService.login(login, password));
+        view.update(userService.login(login, password));
     }
 
     public void delete() {
@@ -47,7 +47,7 @@ public class MenuController {
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
 
-        view.update(menuService.delete(login, password));
+        view.update(userService.delete(login, password));
     }
 
     public void update() {
@@ -56,11 +56,11 @@ public class MenuController {
         String password = askForTextInput(PASSWORD);
         String email = askForTextInput(EMAIL);
 
-        menuService.registerValidation(login, password);
-        if (menuService.checkIfEmailExist(email)) {
+        userService.registerValidation(login, password);
+        if (userService.checkIfEmailExist(email)) {
             return;
         }
-        menuService.update(login, password, email); //TODO: to be corrected
+        userService.update(login, password, email); //TODO: to be corrected
         view.update(UPDATE_CONFIRMATION);
     }
 
