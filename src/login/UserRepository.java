@@ -87,9 +87,6 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
-
-
-
     public Optional<User> findEmail(String email) {
         User user = null;
 
@@ -111,8 +108,6 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
-
-
     public boolean checkIfLoginExist(String userName) {
         return find(userName).isPresent();
     }
@@ -124,6 +119,4 @@ public class UserRepository {
     public boolean checkIfEmailExist (String email) {
         return findEmail(email).isPresent();
     }
-
-
 }

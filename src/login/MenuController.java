@@ -43,8 +43,7 @@ public class MenuController {
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
 
-        view.update(menuService.registerValidation(login, password));
-        view.update(LOGIN_SUCCESSFUL);
+        view.update(menuService.login(login, password));
     }
 
     public void delete() {

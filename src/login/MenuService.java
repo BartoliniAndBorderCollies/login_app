@@ -6,16 +6,15 @@ import java.util.Optional;
 
 public class MenuService {
     private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
+    private static final String USER_NO_EXIST = "This user does not exist.";
     private static final String ERROR_PASSWORD_INVALID = "Invalid password.";
     private static final String SUCCESS_REGISTRATION = "Registration completed!";
-
     private static final String EMAIL_ALREADY_EXIST = "This email address already exist.";
-
+    private static final String LOGIN_SUCCESSFUL = "Login successful";
     private final UserRepository userRepository;
 
     public MenuService(UserRepository userRepository) {
         this.userRepository = userRepository;
-
     }
 
     public boolean checkIfLoginExist(String userName) {
@@ -36,6 +35,14 @@ public class MenuService {
         return lines;
     }
 
+    public List<String> login(String login, String password) {
+        List<String> lines = loginValidation(login, password);
+        if (lines.isEmpty()) {
+            lines.add(LOGIN_SUCCESSFUL);
+        }
+        return lines;
+    }
+
     public List<String> registerValidation(String login, String password) {
         List<String> lines = new ArrayList<>();
 
@@ -46,6 +53,17 @@ public class MenuService {
         if (checkIfCorrectPassword(password)) {
             lines.add(ERROR_PASSWORD_INVALID);
         }
+        return lines;
+    }
+
+    public List<String> loginValidation (String login, String password) {
+        List<String> lines = new ArrayList<>();
+
+        if(!checkIfLoginExist(login)) {
+            lines.add(USER_NO_EXIST);
+        }
+
+        //TODO: make if user has correct password
         return lines;
     }
 
