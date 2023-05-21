@@ -22,7 +22,6 @@ public class MenuService {
     }
 
     public boolean checkIfCorrectPassword(String password) {
-        // walidacja, że hasło powinno mieć x znaków, albo coś tam
         return userRepository.checkIfCorrectPassword(password);
     }
 
@@ -63,7 +62,10 @@ public class MenuService {
             lines.add(USER_NO_EXIST);
         }
 
-        //TODO: make if user has correct password
+        if(!checkIfCorrectPassword(password)) {
+            lines.add(ERROR_PASSWORD_INVALID);
+        }
+
         return lines;
     }
 
