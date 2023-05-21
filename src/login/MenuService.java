@@ -11,6 +11,9 @@ public class MenuService {
     private static final String SUCCESS_REGISTRATION = "Registration completed!";
     private static final String EMAIL_ALREADY_EXIST = "This email address already exist.";
     private static final String LOGIN_SUCCESSFUL = "Login successful";
+    private static final String DELETE_FAILED = "Delete operation failed. No such user name/password.";
+    private static final String DELETE_CONFIRMATION = "User has been deleted.";
+
     private final UserRepository userRepository;
 
     public MenuService(UserRepository userRepository) {
@@ -69,10 +72,23 @@ public class MenuService {
         return lines;
     }
 
-    public void delete(String userName, String password) {
-        loginValidation(userName, password);
+    public List<String> delete(String userName, String password) {
+        List<String> lines = new ArrayList<>();
 
-        userRepository.delete(findUser(userName));
+        if(!loginValidation(userName, password).isEmpty()) {
+            lines.add(DELETE_FAILED);
+        }
+
+        if(!checkIfCorrectPassword(password)) {
+            lines.add(ERROR_PASSWORD_INVALID);
+        }
+
+        if(lines.isEmpty()) {
+            userRepository.delete(findUser(userName));
+            lines.add(DELETE_CONFIRMATION);
+        }
+
+        return lines;
     }
 
 

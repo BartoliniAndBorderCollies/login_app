@@ -17,10 +17,8 @@ public class MenuController {
             """;
     private static final String ANSWER_REQUIREMENT = "Not appropriate number. Try again.";
     private static final String DELETE_QUESTION = "What user you want to delete?";
-    private static final String DELETE_CONFIRMATION = "User has been deleted.";
     private static final String UPDATE_INFO = "Enter new user name and new password";
     private static final String UPDATE_CONFIRMATION = "Update successful";
-
     private final MenuService menuService;
     private final View view;
 
@@ -49,8 +47,7 @@ public class MenuController {
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
 
-        menuService.delete(login, password);
-        view.update(DELETE_CONFIRMATION);
+        view.update(menuService.delete(login, password));
     }
 
     public void update() {
