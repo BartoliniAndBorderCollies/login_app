@@ -9,7 +9,7 @@ public class MenuController {
     private static final String EMAIL = "Email:";
     private static final String SHOW_MENU = """
             Choose what you want to do, type the answer:
-            1. Create account
+            1. Register account
             2. Login
             3. Update account
             4. Delete account
