@@ -13,8 +13,9 @@ public class MenuController {
             2. Login
             3. Update account
             4. Delete account
+            5. Exit program
             """;
-    private static final String ANSWER_REQUIREMENT = "Answer must be an integer";
+    private static final String ANSWER_REQUIREMENT = "Not appropriate number. Try again.";
 
     private static final String LOGIN_SUCCESSFUL = "Login successful";
     private static final String DELETE_QUESTION = "What user name you want to delete?";
@@ -64,13 +65,12 @@ public class MenuController {
         String email = askForTextInput(EMAIL);
 
         menuService.registerValidation(login, password);
-        if(menuService.checkIfEmailExist(email)) {
+        if (menuService.checkIfEmailExist(email)) {
             return;
         }
         menuService.update(login, password, email); //TODO: to be corrected
         view.update(UPDATE_CONFIRMATION);
     }
-
 
 
     private String askForTextInput(String message) {
@@ -82,14 +82,20 @@ public class MenuController {
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
+        boolean repeat = true;
         view.update(WELCOME_MESSAGE);
-        view.update(SHOW_MENU);
 
-        switch (scanner.nextInt()) {
-            case 1 -> register();
-            case 2 -> login();
-            case 3 -> update();
-            case 4 -> delete();
-        }
+        do {
+            view.update(SHOW_MENU);
+
+            switch (scanner.nextInt()) {
+                case 1 -> register();
+                case 2 -> login();
+                case 3 -> update();
+                case 4 -> delete();
+                case 5 -> repeat = false;
+                default -> view.update(ANSWER_REQUIREMENT);
+            }
+        } while (repeat);
     }
 }
