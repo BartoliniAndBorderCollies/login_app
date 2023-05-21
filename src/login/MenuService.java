@@ -69,6 +69,14 @@ public class MenuService {
         return lines;
     }
 
+    public void delete(String userName, String password) {
+        loginValidation(userName, password);
+
+        userRepository.delete(findUser(userName));
+    }
+
+
+
     public User findUser(String name) throws IllegalArgumentException {
         return userRepository.find(name).orElseThrow(IllegalArgumentException::new);
     }
@@ -78,9 +86,7 @@ public class MenuService {
     //bo pierwsza metoda find(), która jest w klasie bazy danych zwraca Optional<User>, a Optionala nie mogłem użyc
     // potrzebowałem samego User user. żeby to osiagnąć muszę obsłużyć optionala poprzez .orElseThrow
 
-    public void delete(String userName) {
-        userRepository.delete(findUser(userName));
-    }
+
 
     public void update(String userName, String password, String email) {
         userRepository.update(findUserUpdate(userName, password,email));
