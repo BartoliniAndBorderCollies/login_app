@@ -6,7 +6,7 @@ import java.util.List;
 public class UserService {
     private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
     private static final String USER_NO_EXIST = "This user does not exist.";
-    private static final String ERROR_PASSWORD_INVALID = "Invalid password.";
+    private static final String ERROR_PASSWORD_INVALID = "Invalid password. Must have minimum 8 characters.";
     private static final String SUCCESS_REGISTRATION = "Registration completed!";
     private static final String EMAIL_ALREADY_EXIST = "This email address already exist.";
     private static final String LOGIN_SUCCESSFUL = "Login successful";
@@ -24,11 +24,8 @@ public class UserService {
     }
 
     public boolean checkIfCorrectPassword(String password) {
-        // TODO: logika dla poprawności hasła.
-        if (password.length() < 8) {
-            return false;
-        }
-        return true;
+
+        return password.length() >= 8;
     }
 
     public List<String> register(String login, String password, String email) {
@@ -66,10 +63,10 @@ public class UserService {
 
         try {
             if (!findUser(login).getPassword().equals(password)) {
-                // TODO lines.add()
+                lines.add(ERROR_PASSWORD_INVALID);
             }
         } catch (IllegalArgumentException e) {
-            // TODO lines.add();
+            lines.add(ERROR_PASSWORD_INVALID);
         }
 
         return lines;
@@ -99,7 +96,7 @@ public class UserService {
     // potrzebowałem samego User user. żeby to osiagnąć muszę obsłużyć optionala poprzez .orElseThrow
 
     public void update(String login, String password, String email) {
-        userRepository.update(findUserUpdate(login, password, email));
+        userRepository.update(login, password, email, findUser(login).getId());
     }
 
     public User findUserUpdate(String login, String password, String email) {
@@ -107,10 +104,6 @@ public class UserService {
     }
 
     public boolean checkIfEmailExist(String email) {
-        if (userRepository.checkIfEmailExist(email)) {
-            // TODO System.out.println(EMAIL_ALREADY_EXIST);
-            return true;
-        }
-        return false;
+        return userRepository.checkIfEmailExist(email);
     }
 }

@@ -17,8 +17,12 @@ public class UserController {
             """;
     private static final String ANSWER_REQUIREMENT = "Not appropriate number. Try again.";
     private static final String DELETE_QUESTION = "What user you want to delete?";
-    private static final String UPDATE_INFO = "Enter new user name and new password";
+    private static final String LOGIN_FIRST = "First you need to log in.";
+    private static final String UPDATE_PROCEDURE = "Enter new user name, new password and new email address";
     private static final String UPDATE_CONFIRMATION = "Update successful";
+    private static final String INVALID_USERNAME_OR_PASSWORD = "Invalid user name or password";
+
+    private static final String THIS_EMAIL_EXIST = "This email already exist.";
     private final UserService userService;
     private final View view;
 
@@ -51,16 +55,21 @@ public class UserController {
     }
 
     public void update() {
-        view.update(UPDATE_INFO);
+        view.update(LOGIN_FIRST);
         String login = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
-        String email = askForTextInput(EMAIL);
 
-        userService.registerValidation(login, password);
-        if (userService.checkIfEmailExist(email)) {
+        if(!userService.login(login, password).isEmpty()){
+            view.update(INVALID_USERNAME_OR_PASSWORD);
             return;
         }
-        userService.update(login, password, email); //TODO: to be corrected
+
+        view.update(UPDATE_PROCEDURE);
+        String newLogin = askForTextInput(LOGIN);
+        String newPassword = askForTextInput(PASSWORD);
+        String newEmail = askForTextInput(EMAIL);
+
+        userService.update(newLogin, newPassword, newEmail);
         view.update(UPDATE_CONFIRMATION);
     }
 
