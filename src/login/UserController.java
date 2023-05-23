@@ -21,8 +21,6 @@ public class UserController {
     private static final String UPDATE_PROCEDURE = "Enter new user name, new password and new email address";
     private static final String UPDATE_CONFIRMATION = "Update successful";
     private static final String INVALID_USERNAME_OR_PASSWORD = "Invalid user name or password";
-
-    private static final String THIS_EMAIL_EXIST = "This email already exist.";
     private final UserService userService;
     private final View view;
 
@@ -72,7 +70,6 @@ public class UserController {
         userService.update(newLogin, newPassword, newEmail, oldLogin);
         view.update(UPDATE_CONFIRMATION);
     }
-
 
     private String askForTextInput(String message) {
         Scanner scanner = new Scanner(System.in);

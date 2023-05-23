@@ -14,20 +14,11 @@ public class User {
         this.password = password;
         this.email = email;
     }
-
-    public int getId() {
-        return id;
-    }
-
     public String getLogin() {
         return login;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }

@@ -5,10 +5,8 @@ import java.util.List;
 
 public class UserService {
     private static final String ERROR_USERNAME_ALREADY_EXIST = "This user already exist.";
-    private static final String USER_NO_EXIST = "This user does not exist.";
     private static final String ERROR_PASSWORD_INVALID = "Invalid password. Must have minimum 8 characters.";
     private static final String SUCCESS_REGISTRATION = "Registration completed!";
-    private static final String EMAIL_ALREADY_EXIST = "This email address already exist.";
     private static final String LOGIN_SUCCESSFUL = "Login successful";
     private static final String DELETE_FAILED = "Delete operation failed. No such user name/password.";
     private static final String DELETE_CONFIRMATION = "User has been deleted.";
@@ -25,7 +23,7 @@ public class UserService {
 
     public boolean checkIfCorrectPassword(String password) {
 
-        return password.length() >= 8;
+        return password.length() < 8;
     }
 
     public List<String> register(String login, String password, String email) {

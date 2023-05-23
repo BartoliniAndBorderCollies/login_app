@@ -12,8 +12,6 @@ public class DatabaseConnection {
         String username = "login_app_user";
         String password =  "Bartek123456";
         return DriverManager.getConnection(url, username, password);
-
-        //TODO: nie mam automatycznego zamykania?
     }
 
 }
