@@ -56,10 +56,10 @@ public class UserController {
 
     public void update() {
         view.update(LOGIN_FIRST);
-        String login = askForTextInput(LOGIN);
+        String oldLogin = askForTextInput(LOGIN);
         String password = askForTextInput(PASSWORD);
 
-        if(!userService.login(login, password).isEmpty()){
+        if(!userService.loginValidation(oldLogin, password).isEmpty()) {
             view.update(INVALID_USERNAME_OR_PASSWORD);
             return;
         }
@@ -69,7 +69,7 @@ public class UserController {
         String newPassword = askForTextInput(PASSWORD);
         String newEmail = askForTextInput(EMAIL);
 
-        userService.update(newLogin, newPassword, newEmail);
+        userService.update(newLogin, newPassword, newEmail, oldLogin);
         view.update(UPDATE_CONFIRMATION);
     }
 

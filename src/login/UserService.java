@@ -95,15 +95,8 @@ public class UserService {
     //bo pierwsza metoda find(), która jest w klasie bazy danych zwraca Optional<User>, a Optionala nie mogłem użyc
     // potrzebowałem samego User user. żeby to osiagnąć muszę obsłużyć optionala poprzez .orElseThrow
 
-    public void update(String login, String password, String email) {
-        userRepository.update(login, password, email, findUser(login).getId());
+    public void update(String newLogin, String newPassword, String newEmail, String oldLogin) {
+        userRepository.update(newLogin, newPassword, newEmail, oldLogin);
+    }
     }
 
-    public User findUserUpdate(String login, String password, String email) {
-        return userRepository.findByLogin(login).orElseThrow();
-    }
-
-    public boolean checkIfEmailExist(String email) {
-        return userRepository.checkIfEmailExist(email);
-    }
-}

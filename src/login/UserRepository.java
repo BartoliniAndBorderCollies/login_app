@@ -31,14 +31,14 @@ public class UserRepository {
         }
     }
 
-    public void update(String login, String password, String email, int id) {
-        String updateUser = "UPDATE users SET login = ?, password = ?, email = ? WHERE id = ?";
+    public void update(String newLogin, String newPassword, String newEmail, String oldLogin) {
+        String updateUser = "UPDATE users SET login = ?, password = ?, email = ? WHERE login = ?";
 
         try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(updateUser)) {
-            preparedStatement.setString(1, login);
-            preparedStatement.setString(2, password);
-            preparedStatement.setString(3, email);
-            preparedStatement.setInt(4, id);
+            preparedStatement.setString(1, newLogin);
+            preparedStatement.setString(2, newPassword);
+            preparedStatement.setString(3, newEmail);
+            preparedStatement.setString(4, oldLogin);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
